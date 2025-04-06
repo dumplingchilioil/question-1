@@ -1,0 +1,89 @@
+TITLE MASM TEMPLATE (Template.asm)
+INCLUDE Irvine32.inc
+
+.data
+
+MARKS               DWORD           89, 70, 55, 95, 63, 69, 43, 40, 82, 74, 48, 77, 60, 50, 45
+STUDENTS            DWORD           15
+AVERAGE             DWORD           ?
+TOTAL               DWORD           0
+HIGHEST             DWORD           0
+LOWEST              DWORD           0
+msgCPP              BYTE            "C++ programming",0
+msgTOTAL            BYTE            "Total Marks: ",0
+msgAVERAGE          BYTE            "Average Marks: ",0
+msgHIGHEST          BYTE            "Highest Marks: ",0
+msgLOWEST           BYTE            "Lowest Marks: ",0
+
+.code
+main PROC
+
+        mov      edx, OFFSET msgCPP
+        call     writestring
+        call     crlf
+
+        mov      ecx, STUDENTS
+        mov      edi, 0
+
+L1:     mov      eax, MARKS[edi]
+        add      TOTAL, eax
+        add      edi, TYPE MARKS
+        loop     L1
+
+        mov      edx, OFFSET msgTOTAL
+        call     writestring
+        mov      eax, TOTAL
+        call     writedec
+        call     crlf
+
+        mov      edx, 0
+        div      Students
+        mov      AVERAGE, eax
+        mov      edx, OFFSET msgAVERAGE
+        call     writestring
+        mov      eax, AVERAGE
+        call     writedec
+        call     crlf
+        
+        mov      ecx, STUDENTS
+        mov      edi, 0
+        mov      eax, MARKS[edi]
+        mov      LOWEST, eax            ;SET LOWEST A NUMBER FOR COMPARE
+
+L2:     mov      eax, MARKS[edi]
+        cmp      eax, HIGHEST
+        ja       L3                     ;IF EAX > HIGHEST JUMP L3
+
+        cmp      eax, LOWEST
+        jb       L4                     ; IF EAX < LOWEST JUMP L4
+
+        jmp      L5                     ;BETWEEN LOWEST & HIGHEST JUMP L5
+
+L3:     mov      HIGHEST, eax          
+        jmp      L5
+
+L4:     mov      LOWEST, eax
+        jmp      L5
+
+L5:     add      edi, TYPE MARKS
+        loop     L2
+
+        mov      edx, OFFSET msgHIGHEST
+        call     writestring
+        mov      eax, HIGHEST
+        call     writedec
+        call     crlf
+
+        mov      edx, OFFSET msgLOWEST
+        call     writestring
+        mov      eax, LOWEST
+        call     writedec
+        call      crlf
+
+exit
+
+main ENDP
+END main
+
+        
+        
